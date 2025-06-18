@@ -3,59 +3,76 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
-use App\Models\Personajes;
+use App\Models\personajes;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class PersonajesController extends Controller
 {
-    public function fetchApi()
+
+    private function obtenerPersonajesApi($paginas = 5)
     {
-        $Personajes = [];
-        for ($i = 1; $i <= 5; $i++) {
+        $personajes = [];
+        for ($i = 1; $i <= $paginas; $i++) {
             $response = Http::get("https://rickandmortyapi.com/api/character/?page=$i");
             if ($response->successful()) {
-                $Personajes = array_merge($Personajes, $response->json()['results']);
+                $personajes = array_merge($personajes, $response->json()['results']);
             }
         }
-        return view('personajes.api', ['Personajes' => $Personajes]);
+        return $personajes;
+    }
+
+    public function fetchApi(Request $request)
+    {
+        $personajes = $this->obtenerPersonajesApi();
+        $perPage = 8;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $items = collect($personajes);
+        $currentPageItems = $items->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $paginator = new LengthAwarePaginator(
+            $currentPageItems,
+            count($items),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+        return view('personajes.api', ['personajes' => $paginator]);
     }
 
     public function storeToDatabase()
     {
-        $Personajes = [];
-        for ($i = 1; $i <= 5; $i++) {
-            $response = Http::get("https://rickandmortyapi.com/api/character/?page=$i");
-            if ($response->successful()) {
-                $Personajes = array_merge($Personajes, $response->json()['results']);
-            }
-        }
-
-        foreach ($Personajes as $char) {
-            Personajes::updateOrCreate(
-                ['id' => $char['id']], 
+        $personajes = $this->obtenerPersonajesApi();
+        foreach ($personajes as $personaje) {
+            personajes::updateOrCreate(
+                ['id' => $personaje['id']], 
                 [
-                    'name' => $char['name'],
-                    'status' => $char['status'],
-                    'species' => $char['species'],
-                    'type' => $char['type'], 
-                    'sex' => $char['gender'], 
-                    'origin_name' => $char['origin']['name'],
-                    'origin_url' => $char['origin']['url'],
-                    'image' => $char['image'],
+                    'name' => $personaje['name'],
+                    'status' => $personaje['status'],
+                    'species' => $personaje['species'],
+                    'type' => $personaje['type'], 
+                    'sex' => $personaje['gender'], 
+                    'origin_name' => $personaje['origin']['name'],
+                    'origin_url' => $personaje['origin']['url'],
+                    'image' => $personaje['image'],
                 ]
             );
         }
-        return redirect()->route('personajes.db')->with('success', 'Personajes guardados y/o actualizados en la base de datos');
+        return redirect()->route('personajes.db')->with('success', 'personajes guardados y/o actualizados en la base de datos');
     }
 
     public function showFromDatabase()
     {
-        $Personajes = Personajes::all();
-        return view('personajes.database', compact('Personajes'));
+        $personajes = personajes::all();
+        if ($personajes->isEmpty()) {
+            return view('personajes.database')->with('mensaje', 'No hay personajes almacenados en la base de datos');
+        }
+        return view('personajes.database', compact('personajes'));
     }
+
 
     public function update(Request $request, $id)
     {
-        $character = Personajes::findOrFail($id);
+        $character = personajes::findOrFail($id);
         $character->update($request->all());
         return redirect()->route('personajes.db')->with('success', 'Personaje actualizado correctamente');
     }

@@ -4,6 +4,8 @@
     <title>Personajes en Base de Datos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/personajes.css') }}">
+   
+
 
 </head>
 
@@ -11,21 +13,26 @@
     <div class="container">
     
         <header class="header text-center">
-            
-            <h1 class="ml-3">Personajes Almacenados</h1>
-            <form method="get" action="{{ route('home') }}">
-                @csrf
-                <button type="submit" class="btn btn-success save-btn">
-                    <i class="fas fa-save"></i> Inicio
-                </button>
-            </form>
+            <h1 class="ml-3">Personajes - Rick and Morty API</h1>
         </header>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{{ route('home') }}">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Almacenados BD</a>
+            </li>
+        </ul>
 
         @if (session('success'))
             <p id="success-alert" class="alert alert-success text-center" role="alert">{{ session('success') }}</p>
         @endif
 
         <div class="table-container">
+            @if (isset($mensaje))
+                <div class="alert alert-warning text-center mt-4">{{ $mensaje }}</div>
+            @else
             <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -38,7 +45,8 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($Personajes as $char)
+                
+                @foreach($personajes as $char)
 
                     <!-- <h1> {{$char}} </h1> -->
                     <tr>
@@ -130,11 +138,31 @@
                 @endforeach
             </tbody>
         </table>
+        @endif
 
         </div>
     </div>
+
+    <div id="spinner-overlay" style="display: none;">
+        <div class="spinner-container">
+            <div class="spinner-border text-light spinner-lg" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="text-light mt-3">Cargando...</p>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    document.getElementById('spinner-overlay').style.display = 'flex';
+                });
+            });
+        });
+
         setTimeout(function () {
             const alert = document.getElementById('success-alert');
             console.log(alert)
