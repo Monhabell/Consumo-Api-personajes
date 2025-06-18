@@ -44,7 +44,7 @@ class PersonajesController extends Controller
                 ]
             );
         }
-        return redirect()->route('personajes.db')->with('success', 'Personajes guardados/actualizados en la base de datos');
+        return redirect()->route('personajes.db')->with('success', 'Personajes guardados y/o actualizados en la base de datos');
     }
 
     public function showFromDatabase()

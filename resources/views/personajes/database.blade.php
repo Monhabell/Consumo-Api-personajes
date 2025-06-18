@@ -11,11 +11,18 @@
     <div class="container">
     
         <header class="header text-center">
-            <h1>Personajes Guardados</h1>
+            
+            <h1 class="ml-3">Personajes Almacenados</h1>
+            <form method="get" action="{{ route('home') }}">
+                @csrf
+                <button type="submit" class="btn btn-success save-btn">
+                    <i class="fas fa-save"></i> Inicio
+                </button>
+            </form>
         </header>
 
         @if (session('success'))
-            <p class="badge bg-success w-100">{{ session('success') }}</p>
+            <p id="success-alert" class="alert alert-success text-center" role="alert">{{ session('success') }}</p>
         @endif
 
         <div class="table-container">
@@ -127,5 +134,16 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        setTimeout(function () {
+            const alert = document.getElementById('success-alert');
+            console.log(alert)
+            if (alert) {
+                alert.style.transition = "opacity 0.5s ease";
+                alert.style.opacity = 0;
+                setTimeout(() => alert.remove(), 500); // Remover del DOM después de desvanecer
+            }
+        }, 3000);
+    </script>
 </body>
 </html>

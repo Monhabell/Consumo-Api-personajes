@@ -16,7 +16,7 @@
         
         <form method="POST" action="{{ route('personajes.save') }}">
             @csrf
-            <button type="submit" class="btn btn-success save-btn">
+            <button type="submit" class="btn btn-success save-btn mb-3">
                 <i class="fas fa-save"></i> Guardar en Base de Datos
             </button>
         </form>
