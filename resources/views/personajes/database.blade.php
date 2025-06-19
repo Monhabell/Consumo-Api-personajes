@@ -39,7 +39,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Status</th>
-                    <th>Spaecie</th>
+                    <th>Specie</th>
                     <th>Imagen</th>
                     <th>Editar</th>
                 </tr>
@@ -139,7 +139,8 @@
             </tbody>
         </table>
         @endif
-
+        
+        {{ $personajes->links() }}
         </div>
     </div>
 

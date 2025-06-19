@@ -7,6 +7,7 @@
     <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqKxklgndQlnW8k9toFzwJyoNwWW0Lpo8g6RrRylvNHHC84ZiHovFRo_gsiGFuWCEZo2E&usqp=CAU" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/personajes.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -27,7 +28,7 @@
         <section>
             <div class="table-container">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table id="personajes" class="table table-striped table-hover">
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
@@ -53,7 +54,7 @@
                                     <td>{{ $char['species'] }}</td>
                                     <td><img src="{{ $char['image'] }}" width="50" class="personaje-img "/></td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $char['id'] }}">
+                                        <button class="btn btn-primary btn-sm d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#modal{{ $char['id'] }}">
                                             <i class="fas fa-eye"></i>Detalle
                                         </button>
 
@@ -142,6 +143,7 @@
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const navLinks = document.querySelectorAll('.nav-link');
@@ -151,22 +153,25 @@
                 });
             });
 
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
+            const spinerBtn = document.querySelectorAll('.nav-link');
+            spinerBtn.forEach(link => {
                 link.addEventListener('click', function (e) {
                     // Mostrar spinner
                     document.getElementById('spinner').style.display = 'block';
                 });
             });
+
         });
+
         document.getElementById('saveForm').addEventListener('submit', function () {
             const button = document.getElementById('saveButton');
             const spinner = document.getElementById('spinner');
-            spinner.classList.remove('d-none');n
-            button.setAttribute('disabled', 'disabled');
+            spinner.classList.remove('d-none');
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Guardando...';
+            button.disabled = true;
         });
-    </script>
 
+    </script>
     
 </body>
 </html>

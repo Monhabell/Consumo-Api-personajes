@@ -54,27 +54,19 @@ php artisan key:generate
 
 ```
 
-### 5. Configurar base de datos
+### 5. Crear base de datos y tablas en MySQL
 
 ```bash
-DB_DATABASE=personajes_db
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-### 6 Crear base de datos en MySQL
-
-```bash
-CREATE DATABASE personajes_db;
+php artisan migrate
 
 ```
 
-### 6 Ejecutar el servidor
+### 6. Ejecutar el servidor
 
 ```bash
 php artisan serve
 
 ```
 
-✍️ Autor
+### ✍️ Autor
 Desarrollado por Gabriel Monhabell
