@@ -47,6 +47,18 @@ cp .env.example .env
 
 ```
 
+```bash
+
+DB_CONNECTION=sqlite
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=personajes_db
+DB_USERNAME=ro
+
+```
+
+
+
 ### 4. Generar clave de aplicacion
 
 ```bash
